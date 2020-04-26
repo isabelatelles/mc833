@@ -184,6 +184,20 @@ int create_movie(Movie movie) {
   return id;
 }
 
+void remove_movie_id(int id){
+  MYSQL *con = connect_to_database();
+
+  char query[40] = "DELETE FROM movie WHERE id = ";
+  char idmovie[10];
+
+  sprintf(idmovie, "%d", id);
+  strcat(query, idmovie);
+
+  execute_query(con, query);
+
+  mysql_close(con);
+}
+
 int main(int argc, char **argv) {
   Movie *movies = get_movies();
 
