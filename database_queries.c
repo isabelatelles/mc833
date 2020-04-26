@@ -11,9 +11,9 @@
  *
  * ********************************************************************* */
 
-#include <my_global.h>
 #include <mysql.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "database_queries.h"
@@ -23,8 +23,7 @@ MYSQL* connect_to_database() {
     MYSQL *con = mysql_init(NULL);
 
     if (con == NULL) {
-        fprintf(stderr, "mysql_init() failed\n");
-        exit(1);
+        report_mysql_init_error();
     }
 
     if (mysql_real_connect(con, "db-movies-mc833.cgmivothrwnj.us-east-1.rds.amazonaws.com",
@@ -35,13 +34,13 @@ MYSQL* connect_to_database() {
     return con;
 }
 
-void execute_query(MYSQL *con, char query[]) {
+void execute_query(MYSQL *con, const char query[]) {
     if (mysql_query(con, query)) {
         report_mysql_error(con);
     }
 }
 
-MYSQL_RES* execute_select_query(MYSQL *con, char query[]) {
+MYSQL_RES* execute_select_query(MYSQL *con, const char query[]) {
     execute_query(con, query);
 
     MYSQL_RES *result = mysql_store_result(con);
@@ -164,6 +163,26 @@ char** get_movie_titles_of_genre(char genre[]) {
     return titles;
 }
 
+int create_movie(Movie movie) {
+    MYSQL *con = connect_to_database();
+
+    char query[] = "INSERT INTO movie (title, synopsis, genre) VALUES('";
+    strcat(query, movie.title);
+    strcat(query, "','");
+    strcat(query, movie.synopsis);
+    strcat(query, "','");
+    strcat(query, movie.genre);
+    strcat(query, "')");
+    execute_query(con, query);
+
+    int id = mysql_insert_id(con);
+    printf("%d\n", id);
+
+    mysql_close(con);
+
+    return id;
+}
+
 int main(int argc, char **argv) {
     Movie *movies = get_movies();
     Movie movie = get_movie_of_id(1);
@@ -172,12 +191,21 @@ int main(int argc, char **argv) {
     printf("%s ", movie.synopsis);
     printf("%s ", movie.genre);
     printf("\n");
+
     // char *title = get_movie_title_of_id(1);
     // printf("%s\n", title);
-    char **titles;
-    titles = get_movie_titles_of_genre("acao");
+    // char **titles;
+    // titles = get_movie_titles_of_genre("acao");
     // for (int i = 0; i < 2; i++) {
     //     printf("%s\n", titles[i]);
     // }
+
+    // Movie new_movie;
+    // strcpy(new_movie.title, "Up - Altas Aventuras");
+    // strcpy(new_movie.synopsis, "Carl Fredricksen é um vendedor de balões que, aos 78 anos, está prestes a perder a casa em que sempre viveu com sua esposa, a falecida Ellie. Após um incidente, Carl é considerado uma ameaça pública e forçado a ser internado. Para evitar que isto aconteça, ele põe balões em sua casa, fazendo com que ela levante voo. Carl quer viajar para uma floresta na América do Sul, onde ele e Ellie sempre desejaram morar, mas descobre que um problema embarcou junto: Russell, um menino de 8 anos.");
+    // strcpy(new_movie.genre, "animação");
+    // int id = create_movie(new_movie);
+    // printf("%d\n", id);
+
     return 0;
 }

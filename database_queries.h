@@ -14,7 +14,6 @@
 #ifndef DATABASE_QUERIES_H
 #define DATABASE_QUERIES_H
 
-#include <my_global.h>
 #include <mysql.h>
 
 typedef struct MovieData {
@@ -30,12 +29,13 @@ typedef struct ExhibitionRoomData {
 } ExhibitionRoom;
 
 MYSQL* connect_to_database();
-void execute_query(MYSQL*, char*);
-MYSQL_RES* execute_select_query(MYSQL*, char*);
+void execute_query(MYSQL*, const char*);
+MYSQL_RES* execute_select_query(MYSQL*, const char*);
 
 Movie* get_movies();
 Movie get_movie_of_id(int);
 char* get_movie_title_of_id(int);
 char** get_movie_titles_of_genre(char*);
+int create_movie();
 
 #endif

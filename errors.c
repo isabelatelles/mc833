@@ -21,6 +21,11 @@ void report_mysql_error(MYSQL *con) {
     exit(1);
 }
 
+void report_mysql_init_error() {
+    fprintf(stderr, "mysql_init() failed\n");
+    exit(1);
+}
+
 void report_id_not_found_error(MYSQL *con, const char* message, int id) {
     fprintf(stderr, "%s [%d].\n", message, id);
     mysql_close(con);
