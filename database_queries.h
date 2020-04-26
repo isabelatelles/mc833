@@ -17,15 +17,15 @@
 #include <mysql.h>
 
 typedef struct MovieData {
-    int id;
-    char title[150];
-    char synopsis[500];
-    char genre[45];
+  int id;
+  char title[150];
+  char synopsis[500];
+  char genre[45];
 } Movie;
 
 typedef struct ExhibitionRoomData {
-    int room_number;
-    int id_movie;
+  int room_number;
+  int id_movie;
 } ExhibitionRoom;
 
 MYSQL* connect_to_database();
