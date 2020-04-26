@@ -184,20 +184,34 @@ int create_movie(Movie movie) {
     return id;
 }
 
+void remove_movie_id(int id){
+  MYSQL *con = connect_to_database();
+
+  char query[40] = "DELETE FROM movie WHERE id = ";
+  char idmovie[10];
+
+  sprintf(idmovie, "%d", id);
+  strcat(query, idmovie);
+
+  execute_query(con, query);
+
+  mysql_close(con);
+}
+
 int main(int argc, char **argv) {
+
     Movie *movies = get_movies();
 
     Movie movie = get_movie_of_id(1);
 
-    printf("%d ", movie.id);
-    printf("%s ", movie.title);
-    printf("%s ", movie.synopsis);
-    printf("%s ", movie.genre);
-    printf("\n");
+    printf("id: %d \n", movie.id);
+    printf("title: %s \n", movie.title);
+    printf("synopsis: %s \n", movie.synopsis);
+    printf("genre: %s \n", movie.genre);
+    printf("\n\n");
 
     char *title = get_movie_title_of_id(1);
     printf("%s\n", title);
-
     char **titles;
     titles = get_movie_titles_of_genre("acao");
     for (int i = 0; i < 2; i++) {
