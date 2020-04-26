@@ -25,7 +25,7 @@ typedef struct MovieData {
 
 typedef struct ExhibitionRoomData {
     int room_number;
-    int id_movie;
+    char movie_title[150];
 } ExhibitionRoom;
 
 MYSQL* connect_to_database();
@@ -38,6 +38,6 @@ char* get_movie_title_of_id(int);
 char** get_movie_titles_of_genre(char*);
 int create_movie();
 void remove_movie_id(int);
-
+ExhibitionRoom* get_exhibition_rooms();
 
 #endif
