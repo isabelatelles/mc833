@@ -15,6 +15,7 @@
 #include <mysql.h>
 
 void report_mysql_error(MYSQL*);
+void report_mysql_init_error();
 void report_id_not_found_error(MYSQL*, const char*, int);
 
 #endif
