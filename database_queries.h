@@ -3,18 +3,18 @@
  * Database queries
  * Description: responsible for the database queries that insert and return
  * information about the movies and exhibition rooms.
- * 
+ *
  * Reference: http://zetcode.com/db/mysqlc/
  *
  * Isabela Telles Furtado Doswaldo - 170012
- * Thamiris Florindo Coelho -
+ * Thamiris Florindo Coelho - 187506
  *
  * ********************************************************************* */
 
 #ifndef DATABASE_QUERIES_H
 #define DATABASE_QUERIES_H
 
-#include <my_global.h>
+//#include <my_global.h>
 #include <mysql.h>
 
 typedef struct MovieData {

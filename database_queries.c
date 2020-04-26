@@ -3,17 +3,18 @@
  * Database queries (implementation)
  * Description: responsible for the database queries that insert and
  * return information about the movies and exhibition rooms.
- * 
+ *
  * Reference: http://zetcode.com/db/mysqlc/
  *
  * Isabela Telles Furtado Doswaldo - 170012
- * Thamiris Florindo Coelho -
+ * Thamiris Florindo Coelho - 187506
  *
  * ********************************************************************* */
 
-#include <my_global.h>
+//#include <my_global.h>
 #include <mysql.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "database_queries.h"
@@ -54,6 +55,7 @@ MYSQL_RES* execute_select_query(MYSQL *con, char query[]) {
 }
 
 Movie* get_movies() {
+
     MYSQL *con = connect_to_database();
 
     MYSQL_RES *result = execute_select_query(con, "SELECT * FROM movie");
@@ -77,11 +79,14 @@ Movie* get_movies() {
 }
 
 Movie get_movie_of_id(int id) {
+
     MYSQL *con = connect_to_database();
 
-    char query[] = "SELECT * FROM movie WHERE idmovie = ";
+    char query[50] = "SELECT * FROM movie WHERE idmovie = ";
     char idmovie[10];
+
     sprintf(idmovie, "%d", id);
+
     strcat(query, idmovie);
 
     MYSQL_RES *result = execute_select_query(con, query);
@@ -108,7 +113,7 @@ Movie get_movie_of_id(int id) {
 char* get_movie_title_of_id(int id) {
     MYSQL *con = connect_to_database();
 
-    char query[] = "SELECT title FROM movie WHERE idmovie = ";
+    char query[50] = "SELECT title FROM movie WHERE idmovie = ";
     char idmovie[10];
     sprintf(idmovie, "%d", id);
     strcat(query, idmovie);
@@ -135,7 +140,7 @@ char* get_movie_title_of_id(int id) {
 char** get_movie_titles_of_genre(char genre[]) {
     MYSQL *con = connect_to_database();
 
-    char query[] = "SELECT title FROM movie WHERE genre = '";
+    char query[50] = "SELECT title FROM movie WHERE genre = '";
     strcat(query, genre);
     strcat(query, "'");
     printf("%s\n", query);
@@ -166,7 +171,9 @@ char** get_movie_titles_of_genre(char genre[]) {
 
 int main(int argc, char **argv) {
     Movie *movies = get_movies();
+
     Movie movie = get_movie_of_id(1);
+
     printf("%d ", movie.id);
     printf("%s ", movie.title);
     printf("%s ", movie.synopsis);
@@ -176,8 +183,8 @@ int main(int argc, char **argv) {
     // printf("%s\n", title);
     char **titles;
     titles = get_movie_titles_of_genre("acao");
-    // for (int i = 0; i < 2; i++) {
-    //     printf("%s\n", titles[i]);
-    // }
+     for (int i = 0; i < 2; i++) {
+         printf("%s\n", titles[i]);
+     }
     return 0;
 }
