@@ -14,9 +14,15 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <stdlib.h>
+
+#include "database_queries.h"
+#include "errors.h"
+#include "client_server.h"
+#include "unp.h"
 
 #define PORT 3490
-#define SA struct sockaddr 
+#define SA struct sockaddr
 
 int main(int argc, char const *argv[]) {
   int socket_fd, new_fd;
@@ -58,6 +64,24 @@ int main(int argc, char const *argv[]) {
     if(!fork()){
       close(socket_fd);
 
+      switch (option) {
+        case OP_CREATE_MOVIE:
+          break;
+        case OP_REMOVE_MOVIE_ID:
+          break;
+        case OP_GET_EXHIBITION_ROOM:
+          break;
+        case OP_GET_MOVIE_TITLES_OF_GENRE:
+          break;
+        case OP_GET_MOVIE_TITLE_OF_ID:
+          break;
+        case OP_GET_MOVIE_OF_ID:
+          break;
+        case OP_GET_MOVIES:
+          break;
+        default:
+          report_error_msg("Invalid option chosen.\n");
+      }
       /* NOSSO CODIGO DE CONEXAO COM O BD DEVE VIR AQUI */
 
       close(new_fd);
