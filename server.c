@@ -11,7 +11,6 @@
  * ********************************************************************* */
 
 #include <stdio.h>
-#include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
 #include <stdlib.h>
@@ -19,7 +18,6 @@
 #include "database_queries.h"
 #include "errors.h"
 #include "client_server.h"
-#include "unp.h"
 
 #define PORT 3490
 #define SA struct sockaddr
@@ -58,11 +56,15 @@ int main(int argc, char const *argv[]) {
   printf("Server listening..\n");
 
   /* Accept clients conections */
+
+  char data[MAX_SIZE];
+
   while(1){
     addr_size = sizeof(client_addr);
     new_fd = accept(socket_fd, (SA *) &server_addr, &addr_size);
     if(!fork()){
       close(socket_fd);
+      data = read_message(new_fd)
 
       switch (option) {
         case OP_CREATE_MOVIE:
