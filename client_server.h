@@ -13,5 +13,3 @@ enum options {
   OP_GET_MOVIE_OF_ID,
   OP_GET_MOVIES
 };
-
-char* read_message(int);

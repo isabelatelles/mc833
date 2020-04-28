@@ -15,10 +15,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #include "database_queries.h"
 #include "errors.h"
-#include "commom.h"
+#include "client_server.h"
 
 #define PORT 8080
 #define SA struct sockaddr
@@ -62,11 +63,16 @@ int main(int argc, char const *argv[]) {
 
   while(1){
     addr_size = sizeof(client_addr);
-    new_fd = accept(socket_fd, (SA *) &server_vaddr, &addr_size);
+    new_fd = accept(socket_fd, (SA *) &server_addr, &addr_size);
     if(!fork()){
       close(socket_fd);
-      printf("%s\n", read_message(new_fd));
-      int option = 0;
+      char buffer[MAX_SIZE];
+      recv(new_fd, buffer, sizeof(buffer), MSG_WAITALL);
+      enum options option;
+
+      memcpy(&option, buffer, sizeof(option));
+      printf("%d\n", option);
+
 
       switch (option) {
         case OP_CREATE_MOVIE:
@@ -78,8 +84,6 @@ int main(int argc, char const *argv[]) {
         case OP_GET_MOVIE_TITLES_OF_GENRE:
           break;
         case OP_GET_MOVIE_TITLE_OF_ID:
-        {
-        }
           break;
         case OP_GET_MOVIE_OF_ID:
           break;

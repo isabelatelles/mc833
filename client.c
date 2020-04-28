@@ -11,8 +11,8 @@
  * ********************************************************************* */
 #include <stdio.h>
 #include <sys/socket.h>
-#include <arpa/inet.h> 
-#include <unistd.h> 
+#include <arpa/inet.h>
+#include <unistd.h>
 #include <string.h>
 #include "errors.h"
 #include "client_server.h"
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   //   report_error_msg("Usage: ./client <server_ip> <server_port>");
   // }
 
-  struct sockaddr_in serv_addr; 
+  struct sockaddr_in serv_addr;
 
   int socket_fd = create_socket();
 
@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-        char send_buffer[sizeof(option) + sizeof(id)];
+        char send_buffer[MAX_SIZE];
         memcpy(send_buffer, &option, sizeof(option));
         memcpy(send_buffer + sizeof(option), &id, sizeof(id));
         write(socket_fd, send_buffer, sizeof(send_buffer));
