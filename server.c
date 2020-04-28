@@ -88,6 +88,11 @@ int main(int argc, char const *argv[]) {
           memcpy(&new_movie, &buffer[shift],sizeof(new_movie));
           shift += sizeof(new_movie);
           memcpy(&room_number, &buffer[shift], sizeof(room_number));
+
+          printf("option: %d\n", option);
+          printf("title: %s\n", new_movie.title);
+          printf("synopsis: %s\n", new_movie.synopsis);
+          printf("genre: %s\n", new_movie.genre);
           new_movie_id = create_movie(new_movie, room_number);
 
           memcpy(&send_buffer[0], &new_movie_id, sizeof(new_movie_id));
@@ -96,13 +101,48 @@ int main(int argc, char const *argv[]) {
           break;
         }
         case OP_REMOVE_MOVIE_ID:
+        {
+          int movie_id;
+          memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
+
+          remove_movie_id(movie_id);
+
+          char send_buffer[MAX_SIZE];
+          int success = 1;
+          memcpy(&send_buffer[0], &success, sizeof(success));
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         case OP_GET_EXHIBITION_ROOM:
+        {
+          ExhibitionRoom * exhibition_rooms;
+
+          exhibition_rooms = get_exhibition_rooms();
+
+          char send_buffer[MAX_SIZE];
+          memcpy(&send_buffer[0], &exhibition_rooms, sizeof(exhibition_rooms));
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         case OP_GET_MOVIE_TITLES_OF_GENRE:
           break;
         case OP_GET_MOVIE_TITLE_OF_ID:
+        {
+          int movie_id;
+          char * title;
+          memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
+
+          title =  get_movie_title_of_id(movie_id);
+
+          char send_buffer[MAX_SIZE];
+
+          memcpy(&send_buffer[0], title, strlen(title));
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         case OP_GET_MOVIE_OF_ID:
         {
           int movie_id;

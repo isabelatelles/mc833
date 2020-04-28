@@ -93,16 +93,20 @@ int main(int argc, char **argv) {
     case OP_CREATE_MOVIE:
       {
         Movie movie;
+        int room_number;
         printf("Please, provide the movie title: ");
         scanf(" %[^\n]s", movie.title);
         printf("Please, provide the movie synopsis: ");
         scanf(" %[^\n]s", movie.synopsis);
         printf("Please, provide the movie genre: ");
         scanf(" %[^\n]s", movie.genre);
+        printf("Please, provide the exhibition room number: ");
+        room_number = read_integer();
 
         char send_buffer[MAX_SIZE];
         memcpy(send_buffer, &option, sizeof(option));
-        memcpy(send_buffer + sizeof(option), &movie, sizeof(movie));
+        memcpy(&send_buffer[sizeof(option)], &movie, sizeof(movie));
+        memcpy(&send_buffer[sizeof(option) + sizeof(movie)], &room_number, sizeof(room_number));
         write(socket_fd, send_buffer, sizeof(send_buffer));
 
         char recv_buffer[MAX_SIZE];
@@ -169,9 +173,9 @@ int main(int argc, char **argv) {
         int id = read_integer();
 
         send_buffer_with_option_and_id(socket_fd, option, id);
-        
+
         char recv_buffer[MAX_SIZE];
-        char *recv_title;
+        char recv_title[150];
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
         memcpy(&recv_title, recv_buffer, sizeof(recv_title));
 

@@ -120,7 +120,7 @@ char* get_movie_title_of_id(int id) {
 
   MYSQL_ROW row = mysql_fetch_row(result);
 
-  char* title = NULL;
+  char *title = NULL;
 
   if (row) {
     title = malloc(sizeof(char) * strlen(row[0]) + 1);
@@ -165,6 +165,27 @@ char** get_movie_titles_of_genre(char genre[]) {
   return titles;
 }
 
+void create_room(int room_number, int movie_id) {
+  MYSQL *con = connect_to_database();
+
+  char query[800] = "INSERT INTO exhibition_room (room_number,fk_idmovie) VALUES (";
+  char buffer[33];
+
+
+  sprintf(buffer, "%d", room_number);
+  strcat(query, buffer);
+  strcat(query, ",");
+  sprintf(buffer, "%d", movie_id);
+  strcat(query, buffer);
+  strcat(query, ")");
+  strcat(query, " ON DUPLICATE KEY UPDATE fk_idmovie = ");
+  sprintf(buffer, "%d", movie_id);
+  strcat(query, buffer);
+  execute_query(con, query);
+
+  mysql_close(con);
+}
+
 int create_movie(Movie movie, int room_number) {
   MYSQL *con = connect_to_database();
 
@@ -181,13 +202,15 @@ int create_movie(Movie movie, int room_number) {
 
   mysql_close(con);
 
+  create_room(room_number, id);
+
   return id;
 }
 
 void remove_movie_id(int id){
   MYSQL *con = connect_to_database();
 
-  char query[40] = "DELETE FROM movie WHERE id = ";
+  char query[40] = "DELETE FROM movie WHERE idmovie = ";
   char idmovie[10];
 
   sprintf(idmovie, "%d", id);
