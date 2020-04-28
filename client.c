@@ -55,10 +55,9 @@ int main(int argc, char **argv) {
   }
 
   if (connect(socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-    printf("Could not connect\n");
     report_error();
   }
-  printf("Connected to server.\n");
+  printf("Connected to server.\n\n");
 
   const char *display = "Choose one option:\n"
                         "0 - Register new movie\n"
@@ -85,6 +84,7 @@ int main(int argc, char **argv) {
       break;
     case OP_REMOVE_MOVIE_ID:
       {
+        printf("Please, provide the movie id: ");
         int id = read_integer();
 
       }
@@ -95,17 +95,19 @@ int main(int argc, char **argv) {
       break;
     case OP_GET_MOVIE_TITLE_OF_ID:
       {
+        printf("Please, provide the movie id: ");
         int id = read_integer();
         char send_buffer[50];
         memcpy(send_buffer, &option, 4);
         memcpy(send_buffer, &id, 4);
-        write(socket_fd, send_buffer, strlen(send_buffer));
         printf("%s\n", send_buffer);
+        write(socket_fd, send_buffer, sizeof(send_buffer));
         printf("Message sent.\n");
       }
       break;
     case OP_GET_MOVIE_OF_ID:
       {
+        printf("Please, provide the movie id: ");
         int id = read_integer();
 
       }
