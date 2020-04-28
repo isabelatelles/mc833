@@ -90,7 +90,7 @@ int main(int argc, char const *argv[]) {
           memcpy(&room_number, &buffer[shift], sizeof(room_number));
           new_movie_id = create_movie(new_movie, room_number);
 
-          memcpy(&send_buffer, &new_movie_id, sizeof(new_movie_id));
+          memcpy(&send_buffer[0], &new_movie_id, sizeof(new_movie_id));
           write(new_fd, send_buffer, sizeof(send_buffer));
 
           break;

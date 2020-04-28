@@ -16,6 +16,7 @@
 #include <string.h>
 #include "errors.h"
 #include "client_server.h"
+#include "database_queries.h"
 // #include "unp.h"
 
 int create_socket() {
@@ -119,9 +120,15 @@ int main(int argc, char **argv) {
         write(socket_fd, send_buffer, sizeof(send_buffer));
 
         char recv_buffer[MAX_SIZE];
+        Movie recv_movie;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
-        printf("%s\n", recv_buffer);
-      }
+        memcpy(&recv_movie, recv_buffer, sizeof(recv_movie));
+
+        printf("%d\n", recv_movie.id);
+        printf("%s\n", recv_movie.title);
+        printf("%s\n", recv_movie.synopsis);
+        printf("%s\n", recv_movie.genre);
+        }
       break;
     case OP_GET_MOVIES:
       break;
