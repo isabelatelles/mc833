@@ -28,7 +28,7 @@ int create_socket() {
 
 int read_integer() {
   int integer;
-  scanf(" %d", &integer);
+  scanf("%d", &integer);
   return integer;
 }
 
