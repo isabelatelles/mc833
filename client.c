@@ -95,13 +95,10 @@ int main(int argc, char **argv) {
         Movie movie;
         printf("Please, provide the movie title: ");
         scanf(" %[^\n]s", movie.title);
-        printf("%s\n", movie.title);
         printf("Please, provide the movie synopsis: ");
         scanf(" %[^\n]s", movie.synopsis);
-        printf("%s\n", movie.synopsis);
         printf("Please, provide the movie genre: ");
         scanf(" %[^\n]s", movie.genre);
-        printf("%s\n", movie.genre);
 
         char send_buffer[MAX_SIZE];
         memcpy(send_buffer, &option, sizeof(option));
