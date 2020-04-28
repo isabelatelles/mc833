@@ -11,9 +11,12 @@
  * ********************************************************************* */
 #include <stdio.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
+#include <arpa/inet.h> 
+#include <unistd.h> 
 #include <string.h>
-#include <errors.h>
+#include "errors.h"
+#include "client_server.h"
+// #include "unp.h"
 
 int create_socket() {
   int socket_fd = socket(PF_INET, SOCK_STREAM, 0);
@@ -30,17 +33,18 @@ int read_integer() {
 }
 
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    printf("Usage: %s <server_ip> <server_port>", argv[0]);
-    
-  }
+  // if (argc != 2) {
+  //   report_error_msg("Usage: ./client <server_ip> <server_port>");
+  // }
 
   struct sockaddr_in serv_addr; 
 
   int socket_fd = create_socket();
 
-  char *server_addr_str = argv[1];
-  int server_port = atoi(argv[2]);
+  // char *server_addr_str = argv[1];
+  // int server_port = atoi(argv[2]);
+  char *server_addr_str = "127.0.0.1";
+  int server_port = 8080;
 
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(server_port);
@@ -51,55 +55,62 @@ int main(int argc, char **argv) {
   }
 
   if (connect(socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    printf("Could not connect\n");
     report_error();
   }
   printf("Connected to server.\n");
 
   const char *display = "Choose one option:\n"
-                        "1 - Register new movie\n"
-                        "2 - Remove a movie of ID\n"
-                        "3 - List titles and exhibition rooms of all movies\n"
-                        "4 - List all movie titles of a GENRE\n"
-                        "5 - Return movie title of ID\n"
-                        "6 - Return movie informations of ID\n"
-                        "7 - List all movies\n\n";
+                        "0 - Register new movie\n"
+                        "1 - Remove a movie of ID\n"
+                        "2 - List titles and exhibition rooms of all movies\n"
+                        "3 - List all movie titles of a GENRE\n"
+                        "4 - Return movie title of ID\n"
+                        "5 - Return movie informations of ID\n"
+                        "6 - List all movies\n\n";
   printf("%s", display);
 
   int option = read_integer();
 
   switch(option) {
-    case 1:
+    case OP_CREATE_MOVIE:
+    {
       char title[150];
       scanf(" %[^\n]s", title);
       char synopsis[500];
       scanf(" %[^\n]s", synopsis);
       char genre[45];
       scanf(" %[^\n]s", genre);
-
+    }
       break;
-    case 2:
+    case OP_REMOVE_MOVIE_ID:
       {
         int id = read_integer();
 
       }
       break;
-    case 3:
+    case OP_GET_EXHIBITION_ROOM:
       break;
-    case 4:
+    case OP_GET_MOVIE_TITLES_OF_GENRE:
       break;
-    case 5:
+    case OP_GET_MOVIE_TITLE_OF_ID:
+      {
+        int id = read_integer();
+        char send_buffer[50];
+        memcpy(send_buffer, &option, 4);
+        memcpy(send_buffer, &id, 4);
+        write(socket_fd, send_buffer, strlen(send_buffer));
+        printf("%s\n", send_buffer);
+        printf("Message sent.\n");
+      }
+      break;
+    case OP_GET_MOVIE_OF_ID:
       {
         int id = read_integer();
 
       }
       break;
-    case 6:
-      {
-        int id = read_integer();
-
-      }
-      break;
-    case 7:
+    case OP_GET_MOVIES:
       break;
     default:
       report_error_msg("Invalid option chosen.\n");
