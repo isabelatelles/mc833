@@ -86,7 +86,10 @@ int main(int argc, char **argv) {
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-
+        char send_buffer[sizeof(option) + sizeof(id)];
+        memcpy(send_buffer, &option, sizeof(option));
+        memcpy(send_buffer + sizeof(option), &id, sizeof(id));
+        write(socket_fd, send_buffer, sizeof(send_buffer));
       }
       break;
     case OP_GET_EXHIBITION_ROOM:
@@ -97,10 +100,11 @@ int main(int argc, char **argv) {
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-        char send_buffer[50];
-        memcpy(send_buffer, &option, 4);
-        memcpy(send_buffer, &id, 4);
-        printf("%s\n", send_buffer);
+        char send_buffer[sizeof(option) + sizeof(id)];
+        memcpy(send_buffer, &option, sizeof(option));
+        memcpy(send_buffer + sizeof(option), &id, sizeof(id));
+        printf("%d\n", *send_buffer);
+        printf("%d\n", *(send_buffer + 4));
         write(socket_fd, send_buffer, sizeof(send_buffer));
         printf("Message sent.\n");
       }
@@ -109,7 +113,10 @@ int main(int argc, char **argv) {
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-
+        char send_buffer[sizeof(option) + sizeof(id)];
+        memcpy(send_buffer, &option, sizeof(option));
+        memcpy(send_buffer + sizeof(option), &id, sizeof(id));
+        write(socket_fd, send_buffer, sizeof(send_buffer));
       }
       break;
     case OP_GET_MOVIES:
