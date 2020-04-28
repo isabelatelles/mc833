@@ -33,6 +33,23 @@ int read_integer() {
   return integer;
 }
 
+void send_buffer_with_option(int socket_fd, int option) {
+  char send_buffer[MAX_SIZE];
+  memcpy(send_buffer, &option, sizeof(option));
+  if ((write(socket_fd, send_buffer, sizeof(send_buffer))) < 0) {
+    report_error();
+  }
+}
+
+void send_buffer_with_option_and_id(int socket_fd, int option, int id) {
+  char send_buffer[MAX_SIZE];
+  memcpy(send_buffer, &option, sizeof(option));
+  memcpy(send_buffer + sizeof(option), &id, sizeof(id));
+  if ((write(socket_fd, send_buffer, sizeof(send_buffer))) < 0) {
+    report_error();
+  }
+}
+
 int main(int argc, char **argv) {
   // if (argc != 2) {
   //   report_error_msg("Usage: ./client <server_ip> <server_port>");
@@ -74,50 +91,102 @@ int main(int argc, char **argv) {
 
   switch(option) {
     case OP_CREATE_MOVIE:
-    {
-      char title[150];
-      scanf(" %[^\n]s", title);
-      char synopsis[500];
-      scanf(" %[^\n]s", synopsis);
-      char genre[45];
-      scanf(" %[^\n]s", genre);
-    }
+      {
+        Movie movie;
+        printf("Please, provide the movie title: ");
+        scanf(" %[^\n]s", movie.title);
+        printf("%s\n", movie.title);
+        printf("Please, provide the movie synopsis: ");
+        scanf(" %[^\n]s", movie.synopsis);
+        printf("%s\n", movie.synopsis);
+        printf("Please, provide the movie genre: ");
+        scanf(" %[^\n]s", movie.genre);
+        printf("%s\n", movie.genre);
+
+        char send_buffer[MAX_SIZE];
+        memcpy(send_buffer, &option, sizeof(option));
+        memcpy(send_buffer + sizeof(option), &movie, sizeof(movie));
+        write(socket_fd, send_buffer, sizeof(send_buffer));
+
+        char recv_buffer[MAX_SIZE];
+        int recv_id;
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        memcpy(&recv_id, recv_buffer, sizeof(recv_id));
+
+        printf("Movie of id %d was successfully created.\n", recv_id);
+      }
       break;
     case OP_REMOVE_MOVIE_ID:
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-        char send_buffer[sizeof(option) + sizeof(id)];
-        memcpy(send_buffer, &option, sizeof(option));
-        memcpy(send_buffer + sizeof(option), &id, sizeof(id));
-        write(socket_fd, send_buffer, sizeof(send_buffer));
+
+        send_buffer_with_option_and_id(socket_fd, option, id);
+
+        char recv_buffer[MAX_SIZE];
+        int succeeded;
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        memcpy(&succeeded, recv_buffer, sizeof(succeeded));
+
+        if (succeeded) {
+          printf("Movie of id %d successfully removed.\n", id);
+        } else {
+          printf("Movie of id %d was not removed.\n", id);
+        }
       }
       break;
     case OP_GET_EXHIBITION_ROOM:
+      {
+        send_buffer_with_option(socket_fd, option);
+
+        char recv_buffer[MAX_SIZE];
+        ExhibitionRoom *recv_exhib_rooms;
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        // TODO: memcpy array of exhibition rooms
+      }
       break;
     case OP_GET_MOVIE_TITLES_OF_GENRE:
+      {
+        char *genre;
+        printf("Please, provide the movie genre: ");
+        scanf(" %[^\n]s", genre);
+
+        char send_buffer[MAX_SIZE];
+        memcpy(send_buffer, &option, sizeof(option));
+        memcpy(send_buffer + sizeof(option), &genre, sizeof(genre));
+        write(socket_fd, send_buffer, sizeof(send_buffer));
+
+        char recv_buffer[MAX_SIZE];
+        char **recv_titles;
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        int size = sizeof(recv_buffer) / sizeof(char*);
+        for (int i = 0; i < size; i++) {
+          memcpy(&recv_titles[i], recv_buffer, sizeof(recv_titles));
+          printf("%s\n", &recv_titles[i]);
+        }
+      }
       break;
     case OP_GET_MOVIE_TITLE_OF_ID:
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-        char send_buffer[sizeof(option) + sizeof(id)];
-        memcpy(send_buffer, &option, sizeof(option));
-        memcpy(send_buffer + sizeof(option), &id, sizeof(id));
-        printf("%d\n", *send_buffer);
-        printf("%d\n", *(send_buffer + 4));
-        write(socket_fd, send_buffer, sizeof(send_buffer));
-        printf("Message sent.\n");
+
+        send_buffer_with_option_and_id(socket_fd, option, id);
+        
+        char recv_buffer[MAX_SIZE];
+        char *recv_title;
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        memcpy(&recv_title, recv_buffer, sizeof(recv_title));
+
+        printf("%s\n", recv_title);
       }
       break;
     case OP_GET_MOVIE_OF_ID:
       {
         printf("Please, provide the movie id: ");
         int id = read_integer();
-        char send_buffer[MAX_SIZE];
-        memcpy(send_buffer, &option, sizeof(option));
-        memcpy(send_buffer + sizeof(option), &id, sizeof(id));
-        write(socket_fd, send_buffer, sizeof(send_buffer));
+
+        send_buffer_with_option_and_id(socket_fd, option, id);
 
         char recv_buffer[MAX_SIZE];
         Movie recv_movie;
@@ -128,9 +197,17 @@ int main(int argc, char **argv) {
         printf("%s\n", recv_movie.title);
         printf("%s\n", recv_movie.synopsis);
         printf("%s\n", recv_movie.genre);
-        }
+      }
       break;
     case OP_GET_MOVIES:
+      {
+        send_buffer_with_option(socket_fd, option);
+
+        char recv_buffer[MAX_SIZE];
+        Movie *recv_movies;
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        // TODO: memcpy array of movies
+      }
       break;
     default:
       report_error_msg("Invalid option chosen.\n");
