@@ -117,6 +117,10 @@ int main(int argc, char **argv) {
         memcpy(send_buffer, &option, sizeof(option));
         memcpy(send_buffer + sizeof(option), &id, sizeof(id));
         write(socket_fd, send_buffer, sizeof(send_buffer));
+
+        char recv_buffer[MAX_SIZE];
+        recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        printf("%s\n", recv_buffer);
       }
       break;
     case OP_GET_MOVIES:
