@@ -18,7 +18,7 @@
 
 #include "database_queries.h"
 #include "errors.h"
-#include "client_server.h"
+#include "commom.h"
 
 #define PORT 8080
 #define SA struct sockaddr
@@ -62,7 +62,7 @@ int main(int argc, char const *argv[]) {
 
   while(1){
     addr_size = sizeof(client_addr);
-    new_fd = accept(socket_fd, (SA *) &server_addr, &addr_size);
+    new_fd = accept(socket_fd, (SA *) &server_vaddr, &addr_size);
     if(!fork()){
       close(socket_fd);
       printf("%s\n", read_message(new_fd));
