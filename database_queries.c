@@ -89,7 +89,7 @@ Movie get_movie_of_id(int id) {
 
   MYSQL_RES *result = execute_select_query(con, query);
 
-  Movie movie;
+  Movie movie = {0};
 
   MYSQL_ROW row = mysql_fetch_row(result);
 
@@ -120,7 +120,7 @@ char* get_movie_title_of_id(int id) {
 
   MYSQL_ROW row = mysql_fetch_row(result);
 
-  char* title;
+  char* title = NULL;
 
   if (row) {
     title = malloc(sizeof(char) * strlen(row[0]) + 1);
@@ -165,7 +165,7 @@ char** get_movie_titles_of_genre(char genre[]) {
   return titles;
 }
 
-int create_movie(Movie movie) {
+int create_movie(Movie movie, int room_number) {
   MYSQL *con = connect_to_database();
 
   char query[800] = "INSERT INTO movie (title, synopsis, genre) VALUES('";
@@ -223,39 +223,39 @@ ExhibitionRoom* get_exhibition_rooms(){
 }
 
 
-int main(int argc, char **argv) {
-  ExhibitionRoom* exhibition_rooms;
-  exhibition_rooms = get_exhibition_rooms();
-
-  for (int i = 0; i < sizeof(exhibition_rooms)/sizeof(ExhibitionRoom*) ; i++){
-    printf("room number: %d\n", exhibition_rooms[i].room_number);
-    printf("movie title: %s\n", exhibition_rooms[i].movie_title);
-    printf("\n");
-  }
-
-  Movie movie = get_movie_of_id(1);
-
-  printf("%d ", movie.id);
-  printf("%s ", movie.title);
-  printf("%s ", movie.synopsis);
-  printf("%s ", movie.genre);
-  printf("\n");
-
-  char *title = get_movie_title_of_id(1);
-  printf("%s\n", title);
-
-  char **titles;
-  titles = get_movie_titles_of_genre("acao");
-  for (int i = 0; i < 2; i++) {
-    printf("%s\n", titles[i]);
-  }
-
-  Movie new_movie;
-  strcpy(new_movie.title, "Up - Altas Aventuras");
-  strcpy(new_movie.synopsis, "Carl Fredricksen é um vendedor de balões que, aos 78 anos, está prestes a perder a casa em que sempre viveu com sua esposa, a falecida Ellie. Após um incidente, Carl é considerado uma ameaça pública e forçado a ser internado. Para evitar que isto aconteça, ele põe balões em sua casa, fazendo com que ela levante voo. Carl quer viajar para uma floresta na América do Sul, onde ele e Ellie sempre desejaram morar, mas descobre que um problema embarcou junto: Russell, um menino de 8 anos.");
-  strcpy(new_movie.genre, "animação");
-  int id = create_movie(new_movie);
-  printf("%d\n", id);
-
-  return 0;
-}
+// int main(int argc, char **argv) {
+//   ExhibitionRoom* exhibition_rooms;
+//   exhibition_rooms = get_exhibition_rooms();
+//
+//   for (int i = 0; i < sizeof(exhibition_rooms)/sizeof(ExhibitionRoom*) ; i++){
+//     printf("room number: %d\n", exhibition_rooms[i].room_number);
+//     printf("movie title: %s\n", exhibition_rooms[i].movie_title);
+//     printf("\n");
+//   }
+//
+//   Movie movie = get_movie_of_id(1);
+//
+//   printf("%d ", movie.id);
+//   printf("%s ", movie.title);
+//   printf("%s ", movie.synopsis);
+//   printf("%s ", movie.genre);
+//   printf("\n");
+//
+//   char *title = get_movie_title_of_id(1);
+//   printf("%s\n", title);
+//
+//   char **titles;
+//   titles = get_movie_titles_of_genre("acao");
+//   for (int i = 0; i < 2; i++) {
+//     printf("%s\n", titles[i]);
+//   }
+//
+//   Movie new_movie;
+//   strcpy(new_movie.title, "Up - Altas Aventuras");
+//   strcpy(new_movie.synopsis, "Carl Fredricksen é um vendedor de balões que, aos 78 anos, está prestes a perder a casa em que sempre viveu com sua esposa, a falecida Ellie. Após um incidente, Carl é considerado uma ameaça pública e forçado a ser internado. Para evitar que isto aconteça, ele põe balões em sua casa, fazendo com que ela levante voo. Carl quer viajar para uma floresta na América do Sul, onde ele e Ellie sempre desejaram morar, mas descobre que um problema embarcou junto: Russell, um menino de 8 anos.");
+//   strcpy(new_movie.genre, "animação");
+//   int id = create_movie(new_movie, 1);
+//   printf("%d\n", id);
+//
+//   return 0;
+// }

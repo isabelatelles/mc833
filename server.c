@@ -66,17 +66,35 @@ int main(int argc, char const *argv[]) {
     new_fd = accept(socket_fd, (SA *) &server_addr, &addr_size);
     if(!fork()){
       close(socket_fd);
+
       char buffer[MAX_SIZE];
+      int shift = 0;
       recv(new_fd, buffer, sizeof(buffer), MSG_WAITALL);
       enum options option;
 
       memcpy(&option, buffer, sizeof(option));
+
+      shift += sizeof(option);
       printf("%d\n", option);
 
 
       switch (option) {
         case OP_CREATE_MOVIE:
+        {
+          Movie new_movie;
+          int room_number, new_movie_id;
+          char send_buffer[MAX_SIZE];
+
+          memcpy(&new_movie, &buffer[shift],sizeof(new_movie));
+          shift += sizeof(new_movie);
+          memcpy(&room_number, &buffer[shift], sizeof(room_number));
+          new_movie_id = create_movie(new_movie, room_number);
+
+          memcpy(&send_buffer, &new_movie_id, sizeof(new_movie_id));
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         case OP_REMOVE_MOVIE_ID:
           break;
         case OP_GET_EXHIBITION_ROOM:
@@ -86,13 +104,26 @@ int main(int argc, char const *argv[]) {
         case OP_GET_MOVIE_TITLE_OF_ID:
           break;
         case OP_GET_MOVIE_OF_ID:
+        {
+          int movie_id;
+          char send_buffer[MAX_SIZE];
+          Movie movie;
+
+          memcpy(&movie_id, &buffer[shift],sizeof(movie_id));
+          printf("movie id: %d", movie_id);
+
+          movie = get_movie_of_id(movie_id);
+
+          memcpy(&send_buffer, &movie, sizeof(movie));
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         case OP_GET_MOVIES:
           break;
         default:
           report_error_msg("Invalid option chosen.\n");
       }
-      /* NOSSO CODIGO DE CONEXAO COM O BD DEVE VIR AQUI */
 
       close(new_fd);
       exit(1);
