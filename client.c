@@ -51,18 +51,16 @@ void send_buffer_with_option_and_id(int socket_fd, int option, int id) {
 }
 
 int main(int argc, char **argv) {
-  // if (argc != 2) {
-  //   report_error_msg("Usage: ./client <server_ip> <server_port>");
-  // }
+  if (argc != 3) {
+    report_error_msg("Usage: ./client <server_ip> <server_port>");
+  }
 
   struct sockaddr_in serv_addr;
 
   int socket_fd = create_socket();
 
-  // char *server_addr_str = argv[1];
-  // int server_port = atoi(argv[2]);
-  char *server_addr_str = "127.0.0.1";
-  int server_port = 8080;
+  char *server_addr_str = argv[1];
+  int server_port = atoi(argv[2]);
 
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(server_port);
