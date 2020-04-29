@@ -35,7 +35,7 @@ MYSQL_RES* execute_select_query(MYSQL*, const char*);
 Movie* get_movies();
 Movie get_movie_of_id(int);
 char* get_movie_title_of_id(int);
-char** get_movie_titles_of_genre(char*);
+char* get_movie_titles_of_genre(char*, int*);
 int create_movie(Movie, int);
 void remove_movie_id(int);
 ExhibitionRoom* get_exhibition_rooms(int*);

@@ -128,7 +128,21 @@ int main(int argc, char const *argv[]) {
           break;
         }
         case OP_GET_MOVIE_TITLES_OF_GENRE:
+        {
+          char genre[MAX_SIZE_GENRE];
+          memcpy(genre, &buffer[shift], sizeof(genre));
+
+          int size;
+          char * titles;
+          titles = get_movie_titles_of_genre(genre, &size);
+
+          char send_buffer[MAX_SIZE];
+          memcpy(&send_buffer[0], &size, sizeof(size));
+          memcpy(&send_buffer[sizeof(size)], titles, sizeof(titles));
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         case OP_GET_MOVIE_TITLE_OF_ID:
         {
           int movie_id;

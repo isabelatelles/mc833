@@ -17,6 +17,7 @@
 #include <stdlib.h>
 
 #include "database_queries.h"
+#include "client_server.h"
 #include "errors.h"
 
 MYSQL* connect_to_database() {
@@ -135,7 +136,7 @@ char* get_movie_title_of_id(int id) {
   return title;
 }
 
-char** get_movie_titles_of_genre(char genre[]) {
+char* get_movie_titles_of_genre(char genre[], int *size) {
   MYSQL *con = connect_to_database();
 
   char query[50] = "SELECT title FROM movie WHERE genre = '";
@@ -145,17 +146,15 @@ char** get_movie_titles_of_genre(char genre[]) {
   MYSQL_RES *result = execute_select_query(con, query);
 
   int num_rows = mysql_num_rows(result);
+  *size = num_rows;
 
-  char** titles = malloc(sizeof(char*) * num_rows);
-  for (int i = 0; i < num_rows; i++) {
-    titles[i] = malloc(sizeof(char) * 150);
-  }
+  char *titles = malloc(sizeof(char) * MAX_SIZE_GENRE * num_rows);
 
   MYSQL_ROW row;
   int i = 0;
 
   while ((row = mysql_fetch_row(result))) {
-    strcpy(titles[i], row[0]);
+    strcpy(&titles[i * MAX_SIZE_GENRE], row[0]);
     i++;
   }
 
