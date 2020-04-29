@@ -148,13 +148,13 @@ char* get_movie_titles_of_genre(char genre[], int *size) {
   int num_rows = mysql_num_rows(result);
   *size = num_rows;
 
-  char *titles = malloc(sizeof(char) * MAX_SIZE_GENRE * num_rows);
+  char *titles = malloc(sizeof(char) * MAX_SIZE_TITLE * num_rows);
 
   MYSQL_ROW row;
   int i = 0;
 
   while ((row = mysql_fetch_row(result))) {
-    strcpy(&titles[i * MAX_SIZE_GENRE], row[0]);
+    strcpy(&titles[i * MAX_SIZE_TITLE], row[0]);
     i++;
   }
 

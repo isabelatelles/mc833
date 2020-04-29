@@ -176,11 +176,11 @@ int main(int argc, char **argv) {
         int num_recv_titles;
         memcpy(&num_recv_titles, recv_buffer, sizeof(num_recv_titles));
 
-        char *recv_titles = malloc(MAX_SIZE_GENRE * num_recv_titles);
+        char *recv_titles = malloc(MAX_SIZE_TITLE * num_recv_titles);
         memcpy(recv_titles, recv_buffer + sizeof(num_recv_titles),
-          MAX_SIZE_GENRE * num_recv_titles);
+          MAX_SIZE_TITLE * num_recv_titles);
         for (int i = 0; i < num_recv_titles; i++) {
-          printf("Title: %s\n", &recv_titles[i * MAX_SIZE_GENRE]);
+          printf("Title: %s\n", &recv_titles[i * MAX_SIZE_TITLE]);
         }
         free(recv_titles);
       }
@@ -232,7 +232,7 @@ int main(int argc, char **argv) {
         Movie *recv_movies = malloc(sizeof(Movie) * num_recv_movies);
         memcpy(recv_movies, recv_buffer + sizeof(num_recv_movies),
           sizeof(Movie) * num_recv_movies);
-        
+
         for (int i = 0; i < num_recv_movies; i++) {
           printf("Id: %d, ", recv_movies[i].id);
           printf("Title: %s, ", recv_movies[i].title);

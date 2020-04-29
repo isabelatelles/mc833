@@ -138,7 +138,7 @@ int main(int argc, char const *argv[]) {
 
           char send_buffer[MAX_SIZE];
           memcpy(&send_buffer[0], &size, sizeof(size));
-          memcpy(&send_buffer[sizeof(size)], titles, sizeof(titles));
+          memcpy(&send_buffer[sizeof(size)], titles, sizeof(char) * MAX_SIZE_TITLE * size);
           write(new_fd, send_buffer, sizeof(send_buffer));
 
           break;
