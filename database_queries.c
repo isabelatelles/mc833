@@ -66,12 +66,15 @@ Movie* get_movies(int *size) {
 
   MYSQL_ROW row;
 
+  int i = 0;
   while ((row = mysql_fetch_row(result))) {
     Movie movie;
     movie.id = atoi(row[0]);
     strcpy(movie.title, row[1]);
     strcpy(movie.synopsis, row[2]);
     strcpy(movie.genre, row[3]);
+    movies[i] = movie;
+    i++;
   }
 
   mysql_free_result(result);
