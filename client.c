@@ -141,9 +141,15 @@ int main(int argc, char **argv) {
         send_buffer_with_option(socket_fd, option);
 
         char recv_buffer[MAX_SIZE];
+        int num_recv_exhib_rooms;
         ExhibitionRoom *recv_exhib_rooms;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
-        // TODO: memcpy array of exhibition rooms
+        memcpy(&num_recv_exhib_rooms, recv_buffer, sizeof(num_recv_exhib_rooms));
+        memcpy(recv_exhib_rooms, recv_buffer, sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
+        for (int i = 0; i < num_recv_exhib_rooms; i++) {
+          printf("%d\n", recv_exhib_rooms[i].room_number);
+          printf("%s\n", recv_exhib_rooms[i].movie_title);
+        }
       }
       break;
     case OP_GET_MOVIE_TITLES_OF_GENRE:
@@ -158,10 +164,11 @@ int main(int argc, char **argv) {
         write(socket_fd, send_buffer, sizeof(send_buffer));
 
         char recv_buffer[MAX_SIZE];
-        char **recv_titles;
+        int num_recv_titles;
+        char *recv_titles[150];
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
-        int size = sizeof(recv_buffer) / sizeof(char*);
-        for (int i = 0; i < size; i++) {
+        memcpy(&num_recv_titles, recv_buffer, sizeof(num_recv_titles));
+        for (int i = 0; i < num_recv_titles; i++) {
           memcpy(&recv_titles[i], recv_buffer, sizeof(recv_titles));
           printf("%s\n", &recv_titles[i]);
         }
@@ -205,8 +212,10 @@ int main(int argc, char **argv) {
         send_buffer_with_option(socket_fd, option);
 
         char recv_buffer[MAX_SIZE];
+        int num_recv_movies;
         Movie *recv_movies;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        memcpy(&num_recv_movies, recv_buffer, sizeof(num_recv_movies));
         // TODO: memcpy array of movies
       }
       break;
