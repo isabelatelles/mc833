@@ -221,7 +221,7 @@ void remove_movie_id(int id){
   mysql_close(con);
 }
 
-ExhibitionRoom* get_exhibition_rooms(){
+ExhibitionRoom* get_exhibition_rooms(int *size){
   MYSQL *con = connect_to_database();
   char query[] = "SELECT room_number, title FROM exhibition_room INNER JOIN movie ON fk_idmovie = idmovie";
 
@@ -229,6 +229,7 @@ ExhibitionRoom* get_exhibition_rooms(){
 
   int num_rows = mysql_num_rows(result);
 
+  *size = num_rows;
   ExhibitionRoom* exhibition_rooms = malloc(sizeof(ExhibitionRoom) * num_rows);
 
   MYSQL_ROW row;
@@ -237,6 +238,7 @@ ExhibitionRoom* get_exhibition_rooms(){
   while ((row = mysql_fetch_row(result))){
     exhibition_rooms[i].room_number = atoi(row[0]);
     strcpy(exhibition_rooms[i].movie_title, row[1]);
+    i++;
   }
 
   mysql_free_result(result);
@@ -248,9 +250,12 @@ ExhibitionRoom* get_exhibition_rooms(){
 
 // int main(int argc, char **argv) {
 //   ExhibitionRoom* exhibition_rooms;
-//   exhibition_rooms = get_exhibition_rooms();
+//   int size;
+//   exhibition_rooms = get_exhibition_rooms(&size);
+//   printf("%d\n", size);
 //
-//   for (int i = 0; i < sizeof(exhibition_rooms)/sizeof(ExhibitionRoom*) ; i++){
+//
+//   for (int i = 0; i < 2; i++){
 //     printf("room number: %d\n", exhibition_rooms[i].room_number);
 //     printf("movie title: %s\n", exhibition_rooms[i].movie_title);
 //     printf("\n");
@@ -280,5 +285,5 @@ ExhibitionRoom* get_exhibition_rooms(){
 //   int id = create_movie(new_movie, 1);
 //   printf("%d\n", id);
 //
-//   return 0;
+  // return 0;
 // }

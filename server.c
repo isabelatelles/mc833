@@ -117,11 +117,12 @@ int main(int argc, char const *argv[]) {
         case OP_GET_EXHIBITION_ROOM:
         {
           ExhibitionRoom * exhibition_rooms;
-
-          exhibition_rooms = get_exhibition_rooms();
+          int size;
+          exhibition_rooms = get_exhibition_rooms(&size);
 
           char send_buffer[MAX_SIZE];
-          memcpy(&send_buffer[0], &exhibition_rooms, sizeof(exhibition_rooms));
+          memcpy(&send_buffer[0], &size, sizeof(size));
+          memcpy(&send_buffer[sizeof(size)], exhibition_rooms, sizeof(ExhibitionRoom)*size);
           write(new_fd, send_buffer, sizeof(send_buffer));
 
           break;
