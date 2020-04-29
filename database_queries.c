@@ -53,13 +53,16 @@ MYSQL_RES* execute_select_query(MYSQL *con, const char query[]) {
   return result;
 }
 
-Movie* get_movies() {
+Movie* get_movies(int *size) {
 
   MYSQL *con = connect_to_database();
 
   MYSQL_RES *result = execute_select_query(con, "SELECT * FROM movie");
 
-  Movie *movies = malloc(sizeof(Movie) * mysql_num_rows(result));
+  int num_rows = mysql_num_rows(result);
+  *size = num_rows;
+
+  Movie *movies = malloc(sizeof(Movie) * num_rows);
 
   MYSQL_ROW row;
 
