@@ -175,7 +175,26 @@ int main(int argc, char const *argv[]) {
           break;
         }
         case OP_GET_MOVIES:
+        {
+          Movie* movies;
+          int size;
+          movies = get_movies(&size);
+
+          for (int i = 0; i < size; i++){
+            printf("id: %d\n", movies[i].id);
+            printf("title: %s\n", movies[i].title);
+            printf("synopsis: %s\n", movies[i].synopsis);
+            printf("genre: %s\n", movies[i].genre);
+
+          }
+
+          char send_buffer[MAX_SIZE];
+          memcpy(&send_buffer[0], &size, sizeof(size));
+          memcpy(&send_buffer[sizeof(size)], movies, sizeof(Movie)*size);
+          write(new_fd, send_buffer, sizeof(send_buffer));
+
           break;
+        }
         default:
           report_error_msg("Invalid option chosen.\n");
       }
