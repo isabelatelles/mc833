@@ -110,8 +110,9 @@ int main(int argc, char **argv) {
         write(socket_fd, send_buffer, sizeof(send_buffer));
 
         char recv_buffer[MAX_SIZE];
-        int recv_id;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+
+        int recv_id;
         memcpy(&recv_id, recv_buffer, sizeof(recv_id));
 
         printf("Movie of id %d was successfully created.\n", recv_id);
@@ -125,8 +126,9 @@ int main(int argc, char **argv) {
         send_buffer_with_option_and_id(socket_fd, option, id);
 
         char recv_buffer[MAX_SIZE];
-        int succeeded;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+
+        int succeeded;
         memcpy(&succeeded, recv_buffer, sizeof(succeeded));
 
         if (succeeded) {
@@ -141,16 +143,20 @@ int main(int argc, char **argv) {
         send_buffer_with_option(socket_fd, option);
 
         char recv_buffer[MAX_SIZE];
-        int num_recv_exhib_rooms;
-        ExhibitionRoom *recv_exhib_rooms;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+
+        int num_recv_exhib_rooms;
         memcpy(&num_recv_exhib_rooms, recv_buffer, sizeof(num_recv_exhib_rooms));
-        memcpy(recv_exhib_rooms, &recv_buffer[sizeof(num_recv_exhib_rooms)], sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
+
+        ExhibitionRoom *recv_exhib_rooms = malloc(sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
+        memcpy(recv_exhib_rooms, recv_buffer + sizeof(num_recv_exhib_rooms),
+          sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
 
         for (int i = 0; i < num_recv_exhib_rooms; i++) {
-          printf("%d\n", recv_exhib_rooms[i].room_number);
-          printf("%s\n", recv_exhib_rooms[i].movie_title);
+          printf("Room number: %d, ", recv_exhib_rooms[i].room_number);
+          printf("Movie title: %s\n", recv_exhib_rooms[i].movie_title);
         }
+        free(recv_exhib_rooms);
       }
       break;
     case OP_GET_MOVIE_TITLES_OF_GENRE:
@@ -165,14 +171,18 @@ int main(int argc, char **argv) {
         write(socket_fd, send_buffer, sizeof(send_buffer));
 
         char recv_buffer[MAX_SIZE];
-        int num_recv_titles;
-        char *recv_titles[150];
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+
+        int num_recv_titles;
         memcpy(&num_recv_titles, recv_buffer, sizeof(num_recv_titles));
+
+        char *recv_titles = malloc(MAX_SIZE_GENRE * num_recv_titles);
+        memcpy(recv_titles, recv_buffer + sizeof(num_recv_titles),
+          MAX_SIZE_GENRE * num_recv_titles);
         for (int i = 0; i < num_recv_titles; i++) {
-          memcpy(&recv_titles[i], recv_buffer, sizeof(recv_titles));
-          printf("%s\n", &recv_titles[i]);
+          printf("Title: %s\n", &recv_titles[i * MAX_SIZE_GENRE]);
         }
+        free(recv_titles);
       }
       break;
     case OP_GET_MOVIE_TITLE_OF_ID:
@@ -183,8 +193,9 @@ int main(int argc, char **argv) {
         send_buffer_with_option_and_id(socket_fd, option, id);
 
         char recv_buffer[MAX_SIZE];
-        char recv_title[150];
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+
+        char recv_title[150];
         memcpy(&recv_title, recv_buffer, sizeof(recv_title));
 
         printf("%s\n", recv_title);
@@ -198,14 +209,14 @@ int main(int argc, char **argv) {
         send_buffer_with_option_and_id(socket_fd, option, id);
 
         char recv_buffer[MAX_SIZE];
-        Movie recv_movie;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+        Movie recv_movie;
         memcpy(&recv_movie, recv_buffer, sizeof(recv_movie));
 
-        printf("%d\n", recv_movie.id);
-        printf("%s\n", recv_movie.title);
-        printf("%s\n", recv_movie.synopsis);
-        printf("%s\n", recv_movie.genre);
+        printf("Id: %d\n", recv_movie.id);
+        printf("Title: %s\n", recv_movie.title);
+        printf("Synopsis: %s\n", recv_movie.synopsis);
+        printf("Genre: %s\n", recv_movie.genre);
       }
       break;
     case OP_GET_MOVIES:
@@ -213,11 +224,22 @@ int main(int argc, char **argv) {
         send_buffer_with_option(socket_fd, option);
 
         char recv_buffer[MAX_SIZE];
-        int num_recv_movies;
-        Movie *recv_movies;
         recv(socket_fd, recv_buffer, sizeof(recv_buffer), MSG_WAITALL);
+
+        int num_recv_movies;
         memcpy(&num_recv_movies, recv_buffer, sizeof(num_recv_movies));
-        // TODO: memcpy array of movies
+
+        Movie *recv_movies = malloc(sizeof(Movie) * num_recv_movies);
+        memcpy(recv_movies, recv_buffer + sizeof(num_recv_movies),
+          sizeof(Movie) * num_recv_movies);
+        
+        for (int i = 0; i < num_recv_movies; i++) {
+          printf("Id: %d, ", recv_movies[i].id);
+          printf("Title: %s, ", recv_movies[i].title);
+          printf("Synopsis: %s, ", recv_movies[i].synopsis);
+          printf("Genre: %s\n", recv_movies[i].genre);
+        }
+        free(recv_movies);
       }
       break;
     default:
