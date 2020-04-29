@@ -159,7 +159,6 @@ int main(int argc, char **argv) {
         printf("Please, provide the movie genre: ");
         scanf(" %[^\n]s", genre);
 
-        printf("genre: %s\n", genre);
         char send_buffer[MAX_SIZE];
         memcpy(send_buffer, &option, sizeof(option));
         memcpy(send_buffer + sizeof(option), genre, sizeof(genre));
