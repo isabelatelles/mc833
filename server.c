@@ -21,10 +21,16 @@
 #include "errors.h"
 #include "client_server.h"
 
-#define PORT 8080
 #define SA struct sockaddr
 
 int main(int argc, char const *argv[]) {
+
+  if (argc != 2) {
+    report_error_msg("Usage: ./server <listening_port>");
+  }
+
+  int listening_port = atoi(argv[1]);
+
   int socket_fd, new_fd;
   struct sockaddr_in server_addr, client_addr;
   socklen_t addr_size;
@@ -40,7 +46,7 @@ int main(int argc, char const *argv[]) {
   /* Configure server settings */
   bzero(&server_addr, sizeof(server_addr));
   server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(PORT);
+  server_addr.sin_port = htons(listening_port);
   server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
   /* Bind */
