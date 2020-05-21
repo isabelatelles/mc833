@@ -83,9 +83,11 @@ int main(int argc, char **argv) {
                         "4 - Return movie title of ID\n"
                         "5 - Return movie informations of ID\n"
                         "6 - List all movies\n\n";
-  printf("%s", display);
+  printf("%s\n", display);
 
   int option = read_integer();
+
+  printf("OP: %d\n", option);
 
   switch(option) {
     case OP_CREATE_MOVIE:
@@ -113,7 +115,10 @@ int main(int argc, char **argv) {
         int recv_id;
         memcpy(&recv_id, recv_buffer, sizeof(recv_id));
 
+        printf("\nRECIVED\n");
         printf("Movie of id %d was successfully created.\n", recv_id);
+        printf("-------------------------------------------------------\n");
+
       }
       break;
     case OP_REMOVE_MOVIE_ID:
@@ -129,11 +134,14 @@ int main(int argc, char **argv) {
         int succeeded;
         memcpy(&succeeded, recv_buffer, sizeof(succeeded));
 
+        printf("\nRECIVED\n");
         if (succeeded) {
           printf("Movie of id %d successfully removed.\n", id);
         } else {
           printf("Movie of id %d was not removed.\n", id);
         }
+        printf("-------------------------------------------------------\n");
+
       }
       break;
     case OP_GET_EXHIBITION_ROOM:
@@ -150,10 +158,13 @@ int main(int argc, char **argv) {
         memcpy(recv_exhib_rooms, recv_buffer + sizeof(num_recv_exhib_rooms),
           sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
 
+        printf("\nRECIVED\n");
         for (int i = 0; i < num_recv_exhib_rooms; i++) {
-          printf("Room number: %d, ", recv_exhib_rooms[i].room_number);
-          printf("Movie title: %s\n", recv_exhib_rooms[i].movie_title);
+          printf("Room number: %d\n", recv_exhib_rooms[i].room_number);
+          printf("Movie title: %s\n\n", recv_exhib_rooms[i].movie_title);
         }
+        printf("-------------------------------------------------------\n");
+
         free(recv_exhib_rooms);
       }
       break;
@@ -177,9 +188,13 @@ int main(int argc, char **argv) {
         char *recv_titles = malloc(sizeof(char) * MAX_SIZE_TITLE * num_recv_titles);
         memcpy(recv_titles, recv_buffer + sizeof(num_recv_titles),
           sizeof(char) * MAX_SIZE_TITLE * num_recv_titles);
+
+        printf("\nRECIVED\n");
         for (int i = 0; i < num_recv_titles; i++) {
           printf("Title: %s\n", &recv_titles[i * MAX_SIZE_TITLE]);
         }
+        printf("-------------------------------------------------------\n");
+
         free(recv_titles);
       }
       break;
@@ -196,7 +211,10 @@ int main(int argc, char **argv) {
         char recv_title[150];
         memcpy(&recv_title, recv_buffer, sizeof(recv_title));
 
-        printf("%s\n", recv_title);
+        printf("\nRECIVED\n");
+        printf("Title: %s\n", recv_title);
+        printf("-------------------------------------------------------\n");
+
       }
       break;
     case OP_GET_MOVIE_OF_ID:
@@ -211,10 +229,13 @@ int main(int argc, char **argv) {
         Movie recv_movie;
         memcpy(&recv_movie, recv_buffer, sizeof(recv_movie));
 
+        printf("\nRECIVED\n");
         printf("Id: %d\n", recv_movie.id);
         printf("Title: %s\n", recv_movie.title);
         printf("Synopsis: %s\n", recv_movie.synopsis);
         printf("Genre: %s\n", recv_movie.genre);
+        printf("-------------------------------------------------------\n");
+
       }
       break;
     case OP_GET_MOVIES:
@@ -231,12 +252,15 @@ int main(int argc, char **argv) {
         memcpy(recv_movies, recv_buffer + sizeof(num_recv_movies),
           sizeof(Movie) * num_recv_movies);
 
+        printf("\nRECIVED\n");
         for (int i = 0; i < num_recv_movies; i++) {
-          printf("Id: %d, ", recv_movies[i].id);
-          printf("Title: %s, ", recv_movies[i].title);
-          printf("Synopsis: %s, ", recv_movies[i].synopsis);
-          printf("Genre: %s\n", recv_movies[i].genre);
+          printf("Id: %d \n", recv_movies[i].id);
+          printf("Title: %s \n", recv_movies[i].title);
+          printf("Synopsis: %s \n", recv_movies[i].synopsis);
+          printf("Genre: %s\n\n", recv_movies[i].genre);
         }
+        printf("-------------------------------------------------------\n");
+
         free(recv_movies);
       }
       break;

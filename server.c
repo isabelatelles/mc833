@@ -75,7 +75,7 @@ int main(int argc, char const *argv[]) {
       memcpy(&option, buffer, sizeof(option));
 
       shift += sizeof(option);
-      printf("OP: %d\n", option);
+      printf("OP: %d\n\n", option);
 
 
       switch (option) {
@@ -92,7 +92,7 @@ int main(int argc, char const *argv[]) {
           printf("RECIVED\n");
           printf("title: %s\n", new_movie.title);
           printf("synopsis: %s\n", new_movie.synopsis);
-          printf("genre: %s\n", new_movie.genre);
+          printf("genre: %s\n\n", new_movie.genre);
 
           new_movie_id = create_movie(new_movie, room_number);
 
@@ -110,8 +110,8 @@ int main(int argc, char const *argv[]) {
           int movie_id;
           memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
 
-          printf("RECIVED\n\n");
-          printf("movie id: %d\n", movie_id);
+          printf("RECIVED\n");
+          printf("movie id: %d\n\n", movie_id);
 
           remove_movie_id(movie_id);
 
@@ -131,7 +131,7 @@ int main(int argc, char const *argv[]) {
           ExhibitionRoom * exhibition_rooms;
           int size;
 
-          printf("RECIVED\n");
+          printf("RECIVED\n\n");
 
           exhibition_rooms = get_exhibition_rooms(&size);
 
@@ -155,7 +155,7 @@ int main(int argc, char const *argv[]) {
           memcpy(genre, &buffer[shift], sizeof(genre));
 
           printf("RECIVED\n");
-          printf("genre: %s\n", genre);
+          printf("genre: %s\n\n", genre);
 
           int size;
           char * titles;
@@ -181,7 +181,7 @@ int main(int argc, char const *argv[]) {
           memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
 
           printf("RECIVED\n");
-          printf("movie id: %d\n", movie_id);
+          printf("movie id: %d\n\n", movie_id);
 
           title =  get_movie_title_of_id(movie_id);
 
@@ -205,7 +205,7 @@ int main(int argc, char const *argv[]) {
 
           memcpy(&movie_id, &buffer[shift],sizeof(movie_id));
           printf("RECIVED\n");
-          printf("movie id: %d\n", movie_id);
+          printf("movie id: %d\n\n", movie_id);
 
           movie = get_movie_of_id(movie_id);
 
@@ -226,7 +226,7 @@ int main(int argc, char const *argv[]) {
           Movie* movies;
           int size;
 
-          printf("RECIVED\n");
+          printf("RECIVED\n\n");
 
           movies = get_movies(&size);
 
