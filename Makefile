@@ -5,3 +5,7 @@ client_local: client.c errors.c database_queries.c
 server: server.c errors.c database_queries.c
 				gcc server.c errors.c database_queries.c -o server `mysql_config --cflags --libs`
 				./server
+
+clean: client server
+				rm -rf client
+				rm -rf server
