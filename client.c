@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
         int recv_id;
         memcpy(&recv_id, recv_buffer, sizeof(recv_id));
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         printf("Movie of id %d was successfully created.\n", recv_id);
         printf("-------------------------------------------------------\n");
 
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
         int succeeded;
         memcpy(&succeeded, recv_buffer, sizeof(succeeded));
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         if (succeeded) {
           printf("Movie of id %d successfully removed.\n", id);
         } else {
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
         memcpy(recv_exhib_rooms, recv_buffer + sizeof(num_recv_exhib_rooms),
           sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         for (int i = 0; i < num_recv_exhib_rooms; i++) {
           printf("Room number: %d\n", recv_exhib_rooms[i].room_number);
           printf("Movie title: %s\n\n", recv_exhib_rooms[i].movie_title);
@@ -189,7 +189,7 @@ int main(int argc, char **argv) {
         memcpy(recv_titles, recv_buffer + sizeof(num_recv_titles),
           sizeof(char) * MAX_SIZE_TITLE * num_recv_titles);
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         for (int i = 0; i < num_recv_titles; i++) {
           printf("Title: %s\n", &recv_titles[i * MAX_SIZE_TITLE]);
         }
@@ -211,7 +211,7 @@ int main(int argc, char **argv) {
         char recv_title[150];
         memcpy(&recv_title, recv_buffer, sizeof(recv_title));
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         printf("Title: %s\n", recv_title);
         printf("-------------------------------------------------------\n");
 
@@ -229,7 +229,7 @@ int main(int argc, char **argv) {
         Movie recv_movie;
         memcpy(&recv_movie, recv_buffer, sizeof(recv_movie));
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         printf("Id: %d\n", recv_movie.id);
         printf("Title: %s\n", recv_movie.title);
         printf("Synopsis: %s\n", recv_movie.synopsis);
@@ -252,7 +252,7 @@ int main(int argc, char **argv) {
         memcpy(recv_movies, recv_buffer + sizeof(num_recv_movies),
           sizeof(Movie) * num_recv_movies);
 
-        printf("\nRECIVED\n");
+        printf("\nRECEIVED\n");
         for (int i = 0; i < num_recv_movies; i++) {
           printf("Id: %d \n", recv_movies[i].id);
           printf("Title: %s \n", recv_movies[i].title);

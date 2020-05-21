@@ -89,7 +89,7 @@ int main(int argc, char const *argv[]) {
           shift += sizeof(new_movie);
           memcpy(&room_number, &buffer[shift], sizeof(room_number));
 
-          printf("RECIVED\n");
+          printf("RECEIVED\n");
           printf("title: %s\n", new_movie.title);
           printf("synopsis: %s\n", new_movie.synopsis);
           printf("genre: %s\n\n", new_movie.genre);
@@ -110,7 +110,7 @@ int main(int argc, char const *argv[]) {
           int movie_id;
           memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
 
-          printf("RECIVED\n");
+          printf("RECEIVED\n");
           printf("movie id: %d\n\n", movie_id);
 
           remove_movie_id(movie_id);
@@ -131,7 +131,7 @@ int main(int argc, char const *argv[]) {
           ExhibitionRoom * exhibition_rooms;
           int size;
 
-          printf("RECIVED\n\n");
+          printf("RECEIVED\n\n");
 
           exhibition_rooms = get_exhibition_rooms(&size);
 
@@ -154,7 +154,7 @@ int main(int argc, char const *argv[]) {
           char genre[MAX_SIZE_GENRE];
           memcpy(genre, &buffer[shift], sizeof(genre));
 
-          printf("RECIVED\n");
+          printf("RECEIVED\n");
           printf("genre: %s\n\n", genre);
 
           int size;
@@ -180,7 +180,7 @@ int main(int argc, char const *argv[]) {
           char * title;
           memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
 
-          printf("RECIVED\n");
+          printf("RECEIVED\n");
           printf("movie id: %d\n\n", movie_id);
 
           title =  get_movie_title_of_id(movie_id);
@@ -204,7 +204,7 @@ int main(int argc, char const *argv[]) {
 
 
           memcpy(&movie_id, &buffer[shift],sizeof(movie_id));
-          printf("RECIVED\n");
+          printf("RECEIVED\n");
           printf("movie id: %d\n\n", movie_id);
 
           movie = get_movie_of_id(movie_id);
@@ -226,7 +226,7 @@ int main(int argc, char const *argv[]) {
           Movie* movies;
           int size;
 
-          printf("RECIVED\n\n");
+          printf("RECEIVED\n\n");
 
           movies = get_movies(&size);
 
