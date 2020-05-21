@@ -75,7 +75,7 @@ int main(int argc, char const *argv[]) {
       memcpy(&option, buffer, sizeof(option));
 
       shift += sizeof(option);
-      printf("%d\n", option);
+      printf("OP: %d\n", option);
 
 
       switch (option) {
@@ -89,11 +89,16 @@ int main(int argc, char const *argv[]) {
           shift += sizeof(new_movie);
           memcpy(&room_number, &buffer[shift], sizeof(room_number));
 
-          printf("option: %d\n", option);
+          printf("RECIVED\n");
           printf("title: %s\n", new_movie.title);
           printf("synopsis: %s\n", new_movie.synopsis);
           printf("genre: %s\n", new_movie.genre);
+
           new_movie_id = create_movie(new_movie, room_number);
+
+          printf("SENT\n");
+          printf("insered movie id: %d\n", new_movie_id);
+          printf("-------------------------------------------------------\n");
 
           memcpy(&send_buffer[0], &new_movie_id, sizeof(new_movie_id));
           write(new_fd, send_buffer, sizeof(send_buffer));
@@ -105,7 +110,14 @@ int main(int argc, char const *argv[]) {
           int movie_id;
           memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
 
+          printf("RECIVED\n\n");
+          printf("movie id: %d\n", movie_id);
+
           remove_movie_id(movie_id);
+
+          printf("SENT\n");
+          printf("success\n");
+          printf("-------------------------------------------------------\n");
 
           char send_buffer[MAX_SIZE];
           int success = 1;
@@ -118,7 +130,17 @@ int main(int argc, char const *argv[]) {
         {
           ExhibitionRoom * exhibition_rooms;
           int size;
+
+          printf("RECIVED\n");
+
           exhibition_rooms = get_exhibition_rooms(&size);
+
+          printf("SENT\n");
+          for (int i = 0; i < size; i++){
+            printf("room number: %d\n", exhibition_rooms[i].room_number);
+            printf("movie title: %s\n\n", exhibition_rooms[i].movie_title);
+          }
+          printf("-------------------------------------------------------\n");
 
           char send_buffer[MAX_SIZE];
           memcpy(&send_buffer[0], &size, sizeof(size));
@@ -132,9 +154,18 @@ int main(int argc, char const *argv[]) {
           char genre[MAX_SIZE_GENRE];
           memcpy(genre, &buffer[shift], sizeof(genre));
 
+          printf("RECIVED\n");
+          printf("genre: %s\n", genre);
+
           int size;
           char * titles;
           titles = get_movie_titles_of_genre(genre, &size);
+
+          printf("SENT\n");
+          for (int i = 0; i < size; i++) {
+            printf("title: %s\n", &titles[i * MAX_SIZE_TITLE]);
+          }
+          printf("-------------------------------------------------------\n");
 
           char send_buffer[MAX_SIZE];
           memcpy(&send_buffer[0], &size, sizeof(size));
@@ -149,7 +180,14 @@ int main(int argc, char const *argv[]) {
           char * title;
           memcpy(&movie_id, &buffer[shift], sizeof(movie_id));
 
+          printf("RECIVED\n");
+          printf("movie id: %d\n", movie_id);
+
           title =  get_movie_title_of_id(movie_id);
+
+          printf("SENT\n");
+          printf("movie title: %s\n", title);
+          printf("-------------------------------------------------------\n");
 
           char send_buffer[MAX_SIZE];
 
@@ -164,10 +202,19 @@ int main(int argc, char const *argv[]) {
           char send_buffer[MAX_SIZE];
           Movie movie;
 
+
           memcpy(&movie_id, &buffer[shift],sizeof(movie_id));
-          printf("movie id: %d", movie_id);
+          printf("RECIVED\n");
+          printf("movie id: %d\n", movie_id);
 
           movie = get_movie_of_id(movie_id);
+
+          printf("SENT\n");
+          printf("movie id: %d\n", movie.id);
+          printf("title: %s\n", movie.title);
+          printf("synopsis: %s\n", movie.synopsis);
+          printf("genre: %s\n", movie.genre);
+          printf("-------------------------------------------------------\n");
 
           memcpy(&send_buffer, &movie, sizeof(movie));
           write(new_fd, send_buffer, sizeof(send_buffer));
@@ -178,15 +225,20 @@ int main(int argc, char const *argv[]) {
         {
           Movie* movies;
           int size;
+
+          printf("RECIVED\n");
+
           movies = get_movies(&size);
 
+          printf("SENT\n");
+
           for (int i = 0; i < size; i++){
-            printf("id: %d\n", movies[i].id);
+            printf("movie id: %d\n", movies[i].id);
             printf("title: %s\n", movies[i].title);
             printf("synopsis: %s\n", movies[i].synopsis);
-            printf("genre: %s\n", movies[i].genre);
-
+            printf("genre: %s\n\n", movies[i].genre);
           }
+          printf("-------------------------------------------------------\n");
 
           char send_buffer[MAX_SIZE];
           memcpy(&send_buffer[0], &size, sizeof(size));
