@@ -87,8 +87,6 @@ int main(int argc, char **argv) {
 
   int option = read_integer();
 
-  printf("OP: %d\n", option);
-
   switch(option) {
     case OP_CREATE_MOVIE:
       {
@@ -115,9 +113,7 @@ int main(int argc, char **argv) {
         int recv_id;
         memcpy(&recv_id, recv_buffer, sizeof(recv_id));
 
-        printf("\nRECEIVED\n");
         printf("Movie of id %d was successfully created.\n", recv_id);
-        printf("-------------------------------------------------------\n");
 
       }
       break;
@@ -134,13 +130,11 @@ int main(int argc, char **argv) {
         int succeeded;
         memcpy(&succeeded, recv_buffer, sizeof(succeeded));
 
-        printf("\nRECEIVED\n");
         if (succeeded) {
           printf("Movie of id %d successfully removed.\n", id);
         } else {
           printf("Movie of id %d was not removed.\n", id);
         }
-        printf("-------------------------------------------------------\n");
 
       }
       break;
@@ -158,12 +152,10 @@ int main(int argc, char **argv) {
         memcpy(recv_exhib_rooms, recv_buffer + sizeof(num_recv_exhib_rooms),
           sizeof(ExhibitionRoom) * num_recv_exhib_rooms);
 
-        printf("\nRECEIVED\n");
         for (int i = 0; i < num_recv_exhib_rooms; i++) {
           printf("Room number: %d\n", recv_exhib_rooms[i].room_number);
           printf("Movie title: %s\n\n", recv_exhib_rooms[i].movie_title);
         }
-        printf("-------------------------------------------------------\n");
 
         free(recv_exhib_rooms);
       }
@@ -189,11 +181,9 @@ int main(int argc, char **argv) {
         memcpy(recv_titles, recv_buffer + sizeof(num_recv_titles),
           sizeof(char) * MAX_SIZE_TITLE * num_recv_titles);
 
-        printf("\nRECEIVED\n");
         for (int i = 0; i < num_recv_titles; i++) {
           printf("Title: %s\n", &recv_titles[i * MAX_SIZE_TITLE]);
         }
-        printf("-------------------------------------------------------\n");
 
         free(recv_titles);
       }
@@ -211,9 +201,7 @@ int main(int argc, char **argv) {
         char recv_title[150];
         memcpy(&recv_title, recv_buffer, sizeof(recv_title));
 
-        printf("\nRECEIVED\n");
         printf("Title: %s\n", recv_title);
-        printf("-------------------------------------------------------\n");
 
       }
       break;
@@ -229,12 +217,10 @@ int main(int argc, char **argv) {
         Movie recv_movie;
         memcpy(&recv_movie, recv_buffer, sizeof(recv_movie));
 
-        printf("\nRECEIVED\n");
         printf("Id: %d\n", recv_movie.id);
         printf("Title: %s\n", recv_movie.title);
         printf("Synopsis: %s\n", recv_movie.synopsis);
         printf("Genre: %s\n", recv_movie.genre);
-        printf("-------------------------------------------------------\n");
 
       }
       break;
@@ -252,14 +238,12 @@ int main(int argc, char **argv) {
         memcpy(recv_movies, recv_buffer + sizeof(num_recv_movies),
           sizeof(Movie) * num_recv_movies);
 
-        printf("\nRECEIVED\n");
         for (int i = 0; i < num_recv_movies; i++) {
           printf("Id: %d \n", recv_movies[i].id);
           printf("Title: %s \n", recv_movies[i].title);
           printf("Synopsis: %s \n", recv_movies[i].synopsis);
           printf("Genre: %s\n\n", recv_movies[i].genre);
         }
-        printf("-------------------------------------------------------\n");
 
         free(recv_movies);
       }
@@ -267,6 +251,8 @@ int main(int argc, char **argv) {
     default:
       report_error_msg("Invalid option chosen.\n");
   }
+
+  close(socket_fd);
 
   return 0;
 }
