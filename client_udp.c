@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
           }
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           int recv_id;
@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
           send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           int succeeded;
@@ -149,7 +149,7 @@ int main(int argc, char **argv) {
           send_buffer_with_option(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           int num_recv_exhib_rooms;
@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
           }
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           int num_recv_titles;
@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
           send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           char recv_title[150];
@@ -223,7 +223,7 @@ int main(int argc, char **argv) {
           send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           Movie recv_movie;
@@ -240,7 +240,7 @@ int main(int argc, char **argv) {
           send_buffer_with_option(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
             report_error();
           }
           int num_recv_movies;
