@@ -36,7 +36,7 @@ int main(int argc, char const *argv[]) {
   socklen_t addr_size;
 
   /* Create socket */
-  socket_fd = socket(PF_INET, SOCK_DGRAM, 0);
+  socket_fd = socket(AF_INET, SOCK_DGRAM, 0);
   if (socket_fd == -1) {
     printf("socket creation failed...\n");
     exit(0);
