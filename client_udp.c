@@ -123,6 +123,7 @@ int main(int argc, char **argv) {
           memcpy(&recv_id, recv_buffer, sizeof(recv_id));
 
           printf("Movie of id %d was successfully created.\n", recv_id);
+          printf("-------------------------------------------------------\n");
         }
         break;
       case OP_REMOVE_MOVIE_ID:
@@ -149,6 +150,7 @@ int main(int argc, char **argv) {
           } else {
             printf("Movie of id %d was not removed.\n", id);
           }
+          printf("-------------------------------------------------------\n");
         }
         break;
       case OP_GET_EXHIBITION_ROOM:
@@ -177,6 +179,7 @@ int main(int argc, char **argv) {
           }
 
           free(recv_exhib_rooms);
+          printf("-------------------------------------------------------\n");
         }
         break;
       case OP_GET_MOVIE_TITLES_OF_GENRE:
@@ -213,6 +216,7 @@ int main(int argc, char **argv) {
           }
 
           free(recv_titles);
+          printf("-------------------------------------------------------\n");
         }
         break;
       case OP_GET_MOVIE_TITLE_OF_ID:
@@ -260,6 +264,7 @@ int main(int argc, char **argv) {
           printf("Title: %s\n", recv_movie.title);
           printf("Synopsis: %s\n", recv_movie.synopsis);
           printf("Genre: %s\n", recv_movie.genre);
+          printf("-------------------------------------------------------\n");
         }
         break;
       case OP_GET_MOVIES:
@@ -290,6 +295,7 @@ int main(int argc, char **argv) {
           }
 
           free(recv_movies);
+          printf("-------------------------------------------------------\n");
         }
         break;
       default:
