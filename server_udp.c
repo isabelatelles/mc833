@@ -64,6 +64,7 @@ int main(int argc, char const *argv[]) {
 
     char buffer[MAX_SIZE];
     int shift = 0;
+    addr_size = sizeof(client_addr);
     recvfrom(socket_fd, buffer, sizeof(buffer), 0, (SA*) &client_addr, &addr_size);
     enum options option;
 
@@ -96,7 +97,7 @@ int main(int argc, char const *argv[]) {
         printf("-------------------------------------------------------\n");
 
         memcpy(&send_buffer[0], &new_movie_id, sizeof(new_movie_id));
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         } 
 
@@ -119,7 +120,7 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         int success = 1;
         memcpy(&send_buffer[0], &success, sizeof(success));
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         } 
 
@@ -144,7 +145,7 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         memcpy(&send_buffer[0], &size, sizeof(size));
         memcpy(&send_buffer[sizeof(size)], exhibition_rooms, sizeof(ExhibitionRoom)*size);
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         }
 
@@ -171,7 +172,7 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         memcpy(&send_buffer[0], &size, sizeof(size));
         memcpy(&send_buffer[sizeof(size)], titles, sizeof(char) * MAX_SIZE_TITLE * size);
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         }
 
@@ -195,7 +196,7 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
 
         memcpy(&send_buffer[0], title, strlen(title));
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         }
 
@@ -222,7 +223,7 @@ int main(int argc, char const *argv[]) {
         printf("-------------------------------------------------------\n");
 
         memcpy(&send_buffer, &movie, sizeof(movie));
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         }
 
@@ -250,7 +251,7 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         memcpy(&send_buffer[0], &size, sizeof(size));
         memcpy(&send_buffer[sizeof(size)], movies, sizeof(Movie)*size);
-        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, addr_size) < 0) {
           report_error();
         }
 
