@@ -27,7 +27,7 @@ MYSQL* connect_to_database() {
     report_mysql_init_error();
   }
 
-  if (mysql_real_connect(con, "db-movies-mc833.cgmivothrwnj.us-east-1.rds.amazonaws.com",
+  if (mysql_real_connect(con, "database-2.c3eusmb3fdd7.us-east-1.rds.amazonaws.com",
     "admin", "thisissparta", "innodb", 0, NULL, 0) == NULL) {
     report_mysql_error(con);
   }
