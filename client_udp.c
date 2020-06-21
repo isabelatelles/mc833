@@ -33,19 +33,21 @@ int read_integer() {
   return integer;
 }
 
-void send_buffer_with_option(int socket_fd, int option) {
+void send_buffer_with_option(int socket_fd, const SA *p_serv_addr, socklen_t serv_len,
+  int option) {
   char send_buffer[MAX_SIZE];
   memcpy(send_buffer, &option, sizeof(option));
-  if ((sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, NULL, sizeof(server_addr))) < 0) {
+  if ((sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, p_serv_addr, serv_len)) < 0) {
     report_error();
   }
 }
 
-void send_buffer_with_option_and_id(int socket_fd, int option, int id) {
+void send_buffer_with_option_and_id(int socket_fd, const SA *p_serv_addr,
+  socklen_t serv_len, int option, int id) {
   char send_buffer[MAX_SIZE];
   memcpy(send_buffer, &option, sizeof(option));
   memcpy(send_buffer + sizeof(option), &id, sizeof(id));
-  if ((sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, NULL, sizeof(server_addr))) < 0) {
+  if ((sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, p_serv_addr, serv_len)) < 0) {
     report_error();
   }
 }
@@ -107,10 +109,12 @@ int main(int argc, char **argv) {
           memcpy(send_buffer, &option, sizeof(option));
           memcpy(&send_buffer[sizeof(option)], &movie, sizeof(movie));
           memcpy(&send_buffer[sizeof(option) + sizeof(movie)], &room_number, sizeof(room_number));
-          sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, NULL, sizeof(server_addr));
+          if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr)) < 0) {
+            report_error();
+          }
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           int recv_id;
@@ -124,10 +128,10 @@ int main(int argc, char **argv) {
           printf("Please, provide the movie id: ");
           int id = read_integer();
 
-          send_buffer_with_option_and_id(socket_fd, option, id);
+          send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           int succeeded;
@@ -142,10 +146,10 @@ int main(int argc, char **argv) {
         break;
       case OP_GET_EXHIBITION_ROOM:
         {
-          send_buffer_with_option(socket_fd, option);
+          send_buffer_with_option(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           int num_recv_exhib_rooms;
@@ -172,10 +176,12 @@ int main(int argc, char **argv) {
           char send_buffer[MAX_SIZE];
           memcpy(send_buffer, &option, sizeof(option));
           memcpy(send_buffer + sizeof(option), genre, sizeof(genre));
-          sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, NULL, sizeof(server_addr));
+          if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr)) < 0) {
+            report_error();
+          }
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           int num_recv_titles;
@@ -197,10 +203,10 @@ int main(int argc, char **argv) {
           printf("Please, provide the movie id: ");
           int id = read_integer();
 
-          send_buffer_with_option_and_id(socket_fd, option, id);
+          send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           char recv_title[150];
@@ -214,10 +220,10 @@ int main(int argc, char **argv) {
           printf("Please, provide the movie id: ");
           int id = read_integer();
 
-          send_buffer_with_option_and_id(socket_fd, option, id);
+          send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           Movie recv_movie;
@@ -231,10 +237,10 @@ int main(int argc, char **argv) {
         break;
       case OP_GET_MOVIES:
         {
-          send_buffer_with_option(socket_fd, option);
+          send_buffer_with_option(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, (SA*) &serv_addr, sizeof(serv_addr))) < 0) {
             report_error();
           }
           int num_recv_movies;
