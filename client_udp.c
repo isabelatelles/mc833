@@ -3,8 +3,6 @@
  * UDP Client (implementation)
  * Description: responsible for sending requests to server.
  *
- * Reference: https://www.geeksforgeeks.org/udp-client-server-using-connect-c-implementation/
- *
  * Isabela Telles Furtado Doswaldo - 170012
  * Thamiris Florindo Coelho - 187506
  *
@@ -75,11 +73,6 @@ int main(int argc, char **argv) {
   if(inet_pton(AF_INET, server_addr_str, &serv_addr.sin_addr) <= 0) {
     report_error();
   }
-
-  if (connect(socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-    report_error();
-  }
-  printf("Connected to server.\n\n");
 
   const char *display = "Choose one option:\n"
                         "0 - Register new movie\n"
