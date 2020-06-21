@@ -57,7 +57,7 @@ int main(int argc, char const *argv[]) {
   printf("Socket successfully binded..\n");
 
   /* Listen */
-  if((listen(socket_fd, 5)) != 0){
+  if((listen(socket_fd, 10)) != 0){
     printf("Listen failed...\n");
     exit(0);
   }
@@ -71,7 +71,7 @@ int main(int argc, char const *argv[]) {
 
     char buffer[MAX_SIZE];
     int shift = 0;
-    recvfrom(socket_df, buffer, sizeof(buffer), 0, (SA*) client_addr, sizeof(client_addr));
+    recvfrom(socket_fd, buffer, sizeof(buffer), 0, (SA*) &client_addr, &addr_size);
     enum options option;
 
     memcpy(&option, buffer, sizeof(option));
