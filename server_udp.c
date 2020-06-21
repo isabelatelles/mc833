@@ -56,14 +56,7 @@ int main(int argc, char const *argv[]) {
   }
   printf("Socket successfully binded..\n");
 
-  /* Listen */
-  if((listen(socket_fd, 10)) != 0){
-    printf("Listen failed...\n");
-    exit(0);
-  }
-  printf("Server listening..\n");
-
-  /* Accept clients conections */
+  /* Recieve Datagrams */
 
   char data[MAX_SIZE];
 
