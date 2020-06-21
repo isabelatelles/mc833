@@ -20,7 +20,7 @@
 #include "database_queries.h"
 
 int create_socket() {
-  int socket_fd = socket(PF_INET, SOCK_DGRAM, 0);
+  int socket_fd = socket(AF_INET, SOCK_DGRAM, 0);
   if (socket_fd < 0) {
     report_error();
   }
@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           int recv_id;
@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           int succeeded;
@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           int num_recv_exhib_rooms;
@@ -205,7 +205,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           int num_recv_titles;
@@ -235,7 +235,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           char recv_title[150];
@@ -257,7 +257,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           Movie recv_movie;
@@ -279,7 +279,7 @@ int main(int argc, char **argv) {
               report_error();
             }
           } else {
-            printf("Timeout reached. Try again.\n");
+            printf("Timeout reached. Try again.\n\n");
             break;
           }
           int num_recv_movies;
