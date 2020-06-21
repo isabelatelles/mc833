@@ -7,6 +7,8 @@
 #define MAX_SIZE_GENRE 45
 #define MAX_SIZE_SYNOPSIS 500
 
+#define TIMEOUT 15000
+
 enum options {
   OP_CREATE_MOVIE,
   OP_REMOVE_MOVIE_ID,
