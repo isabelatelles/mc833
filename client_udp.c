@@ -85,12 +85,12 @@ int main(int argc, char **argv) {
                         "4 - Return movie title of ID\n"
                         "5 - Return movie informations of ID\n"
                         "6 - List all movies\n"
-                        "7 - Close connection\n";
+                        "7 - Close client\n";
   printf("%s\n", display);
 
   int option = read_integer();
 
-  while(option != OP_CLOSE_CONNECTION) {
+  while(option != OP_CLOSE_CLIENT) {
     switch(option) {
       case OP_CREATE_MOVIE:
         {
@@ -265,8 +265,6 @@ int main(int argc, char **argv) {
     }
     option = read_integer();
   }
-
-  close(socket_fd);
 
   return 0;
 }
