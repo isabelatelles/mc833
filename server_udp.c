@@ -96,7 +96,9 @@ int main(int argc, char const *argv[]) {
         printf("-------------------------------------------------------\n");
 
         memcpy(&send_buffer[0], &new_movie_id, sizeof(new_movie_id));
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        } 
 
         break;
       }
@@ -117,7 +119,9 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         int success = 1;
         memcpy(&send_buffer[0], &success, sizeof(success));
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        } 
 
         break;
       }
@@ -140,7 +144,9 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         memcpy(&send_buffer[0], &size, sizeof(size));
         memcpy(&send_buffer[sizeof(size)], exhibition_rooms, sizeof(ExhibitionRoom)*size);
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        }
 
         break;
       }
@@ -165,7 +171,9 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         memcpy(&send_buffer[0], &size, sizeof(size));
         memcpy(&send_buffer[sizeof(size)], titles, sizeof(char) * MAX_SIZE_TITLE * size);
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        }
 
         break;
       }
@@ -187,7 +195,9 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
 
         memcpy(&send_buffer[0], title, strlen(title));
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        }
 
         break;
       }
@@ -212,7 +222,9 @@ int main(int argc, char const *argv[]) {
         printf("-------------------------------------------------------\n");
 
         memcpy(&send_buffer, &movie, sizeof(movie));
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        }
 
         break;
       }
@@ -238,7 +250,9 @@ int main(int argc, char const *argv[]) {
         char send_buffer[MAX_SIZE];
         memcpy(&send_buffer[0], &size, sizeof(size));
         memcpy(&send_buffer[sizeof(size)], movies, sizeof(Movie)*size);
-        sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr));
+        if (sendto(socket_fd, send_buffer, sizeof(send_buffer), 0,  (SA *) &client_addr, sizeof(client_addr)) < 0) {
+          report_error();
+        }
 
         break;
       }
