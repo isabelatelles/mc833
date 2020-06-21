@@ -14,10 +14,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <poll.h>
 #include "errors.h"
 #include "client_server.h"
 #include "database_queries.h"
-// #include "unp.h"
 
 int create_socket() {
   int socket_fd = socket(PF_INET, SOCK_DGRAM, 0);
@@ -60,6 +60,10 @@ int main(int argc, char **argv) {
   struct sockaddr_in serv_addr;
 
   int socket_fd = create_socket();
+
+  struct poll_fd poll_set;
+  poll_set.fd = socket_fd;
+  poll_set.events = POLLIN;
 
   char *server_addr_str = argv[1];
   int server_port = atoi(argv[2]);
@@ -114,8 +118,13 @@ int main(int argc, char **argv) {
           }
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           int recv_id;
           memcpy(&recv_id, recv_buffer, sizeof(recv_id));
@@ -131,8 +140,13 @@ int main(int argc, char **argv) {
           send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           int succeeded;
           memcpy(&succeeded, recv_buffer, sizeof(succeeded));
@@ -149,8 +163,13 @@ int main(int argc, char **argv) {
           send_buffer_with_option(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           int num_recv_exhib_rooms;
           memcpy(&num_recv_exhib_rooms, recv_buffer, sizeof(num_recv_exhib_rooms));
@@ -181,8 +200,13 @@ int main(int argc, char **argv) {
           }
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           int num_recv_titles;
           memcpy(&num_recv_titles, recv_buffer, sizeof(num_recv_titles));
@@ -206,8 +230,13 @@ int main(int argc, char **argv) {
           send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           char recv_title[150];
           memcpy(&recv_title, recv_buffer, sizeof(recv_title));
@@ -223,8 +252,13 @@ int main(int argc, char **argv) {
           send_buffer_with_option_and_id(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option, id);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           Movie recv_movie;
           memcpy(&recv_movie, recv_buffer, sizeof(recv_movie));
@@ -240,8 +274,13 @@ int main(int argc, char **argv) {
           send_buffer_with_option(socket_fd, (SA*) &serv_addr, sizeof(serv_addr), option);
 
           char recv_buffer[MAX_SIZE];
-          if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
-            report_error();
+          if (poll(&poll_set, 1, TIMEOUT) > 0) {
+            if ((recvfrom(socket_fd, recv_buffer, sizeof(recv_buffer), 0, NULL, NULL)) < 0) {
+              report_error();
+            }
+          } else {
+            printf("Timeout reached. Try again.\n")
+            break;
           }
           int num_recv_movies;
           memcpy(&num_recv_movies, recv_buffer, sizeof(num_recv_movies));
