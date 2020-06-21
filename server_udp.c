@@ -259,7 +259,6 @@ int main(int argc, char const *argv[]) {
       default:
         report_error_msg("Invalid option chosen.\n");
     }
-    exit(1);
-    }
+  }
   return 0;
 }
