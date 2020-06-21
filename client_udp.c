@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 
   int socket_fd = create_socket();
 
-  struct poll_fd poll_set;
+  struct pollfd poll_set;
   poll_set.fd = socket_fd;
   poll_set.events = POLLIN;
 
